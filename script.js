@@ -14,6 +14,10 @@ const createCustomElement = (element, className, innerText) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
+const cartItemClickListener = (event) => {
+  event.target.remove();
+};
+
 const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -64,10 +68,6 @@ const productList = async () => {
     const elements = createProductItemElement(products);
     itemsContainer.appendChild(elements);  
   });
-};
-
-const cartItemClickListener = (event) => {
- event.target.remove();
 };
 
 window.onload = productList;

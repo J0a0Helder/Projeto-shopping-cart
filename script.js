@@ -12,36 +12,6 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
-const createProductItemElement = ({ sku, name, image }) => {
-  const section = document.createElement('section');
-  section.className = 'item';
-
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  const button = (createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-  // eslint-disable-next-line no-use-before-define
-  button.addEventListener('click', gettinID);
-  section.appendChild(button);
-  return section;
-};
-
-const productList = async () => {
-  const itemsContainer = document.getElementsByClassName('items')[0];
-
-  const { results } = await fetchProducts('computador');
-  results.forEach((element) => {
-    const { id: sku, title: name, thumbnail: image } = element;
-    const products = {
-      sku,
-      name,
-      image,
-    };
-    const elements = createProductItemElement(products);
-    itemsContainer.appendChild(elements);  
-  });
-};
-
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
 const cartItemClickListener = (event) => {
@@ -69,6 +39,35 @@ const gettinID = async (event) => {
 
   const elements = createCartItemElement(products);
   itemsContainer.appendChild(elements);
+};
+
+const createProductItemElement = ({ sku, name, image }) => {
+  const section = document.createElement('section');
+  section.className = 'item';
+
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  const button = (createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  button.addEventListener('click', gettinID);
+  section.appendChild(button);
+  return section;
+};
+
+const productList = async () => {
+  const itemsContainer = document.getElementsByClassName('items')[0];
+
+  const { results } = await fetchProducts('computador');
+  results.forEach((element) => {
+    const { id: sku, title: name, thumbnail: image } = element;
+    const products = {
+      sku,
+      name,
+      image,
+    };
+    const elements = createProductItemElement(products);
+    itemsContainer.appendChild(elements);  
+  });
 };
 
 window.onload = productList;

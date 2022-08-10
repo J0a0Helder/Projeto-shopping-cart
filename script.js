@@ -1,4 +1,5 @@
 const itemsContainer = document.getElementsByClassName('cart__items')[0];
+const items = document.getElementsByClassName('items')[0];
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -56,9 +57,12 @@ const createProductItemElement = ({ sku, name, image }) => {
 };
 
 const productList = async () => {
-  const container = document.getElementsByClassName('items')[0];
-
+  const loadText = document.createElement('section');
+  loadText.innerText = 'carregando...';
+  loadText.className = 'loading';
+  items.appendChild(loadText);
   const { results } = await fetchProducts('computador');
+  loadText.parentElement.removeChild(loadText);
   results.forEach((element) => {
     const { id: sku, title: name, thumbnail: image } = element;
     const products = {
@@ -67,7 +71,7 @@ const productList = async () => {
       image,
     };
     const elements = createProductItemElement(products);
-    container.appendChild(elements);  
+    items.appendChild(elements);  
   });
 };
 

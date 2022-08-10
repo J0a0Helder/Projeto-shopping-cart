@@ -1,3 +1,5 @@
+const itemsContainer = document.getElementsByClassName('cart__items')[0];
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -27,8 +29,6 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 };
 
 const gettinID = async (event) => {
-  const itemsContainer = document.getElementsByClassName('cart__items')[0];
-
   const id = getSkuFromProductItem(event.target.parentElement);
   const { id: sku, title: name, price: salePrice } = await fetchItem(id);
   const products = {
@@ -39,6 +39,7 @@ const gettinID = async (event) => {
 
   const elements = createCartItemElement(products);
   itemsContainer.appendChild(elements);
+  saveCartItems(itemsContainer.innerHTML);
 };
 
 const createProductItemElement = ({ sku, name, image }) => {
@@ -55,7 +56,7 @@ const createProductItemElement = ({ sku, name, image }) => {
 };
 
 const productList = async () => {
-  const itemsContainer = document.getElementsByClassName('items')[0];
+  const container = document.getElementsByClassName('items')[0];
 
   const { results } = await fetchProducts('computador');
   results.forEach((element) => {
@@ -66,8 +67,19 @@ const productList = async () => {
       image,
     };
     const elements = createProductItemElement(products);
-    itemsContainer.appendChild(elements);  
+    container.appendChild(elements);  
   });
 };
 
-window.onload = productList;
+const gettinSavedCart = () => {
+  itemsContainer.innerHTML = getSavedCartItems();
+  const LiItems = itemsContainer.children;
+  for (let index = 0; index < LiItems.length; index += 1) {
+    LiItems[index].addEventListener('click', cartItemClickListener);
+  }
+};
+
+window.onload = () => {
+  productList();
+  gettinSavedCart();
+};
